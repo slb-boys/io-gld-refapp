@@ -1,0 +1,15 @@
+i:\src\winglue\apps\pnas\io-gld-refapp\io-gld-refapp\bin\Debug\io-gld-refapp.exe.config
+i:\src\winglue\apps\pnas\io-gld-refapp\io-gld-refapp\bin\Debug\io-gld-refapp.exe
+i:\src\winglue\apps\pnas\io-gld-refapp\io-gld-refapp\bin\Debug\io-gld-refapp.pdb
+i:\src\winglue\apps\pnas\io-gld-refapp\io-gld-refapp\bin\Debug\AustinHarris.JsonRpc.dll
+i:\src\winglue\apps\pnas\io-gld-refapp\io-gld-refapp\bin\Debug\Newtonsoft.Json.dll
+i:\src\winglue\apps\pnas\io-gld-refapp\io-gld-refapp\bin\Debug\AustinHarris.JsonRpc.pdb
+i:\src\winglue\apps\pnas\io-gld-refapp\io-gld-refapp\bin\Debug\Newtonsoft.Json.xml
+i:\src\winglue\apps\pnas\io-gld-refapp\io-gld-refapp\obj\Debug\io-gld-refapp.csprojResolveAssemblyReference.cache
+i:\src\winglue\apps\pnas\io-gld-refapp\io-gld-refapp\obj\Debug\io_gld_refapp.Form1.resources
+i:\src\winglue\apps\pnas\io-gld-refapp\io-gld-refapp\obj\Debug\io_gld_refapp.Properties.Resources.resources
+i:\src\winglue\apps\pnas\io-gld-refapp\io-gld-refapp\obj\Debug\io-gld-refapp.csproj.GenerateResource.Cache
+i:\src\winglue\apps\pnas\io-gld-refapp\io-gld-refapp\obj\Debug\io-gld-refapp.exe
+i:\src\winglue\apps\pnas\io-gld-refapp\io-gld-refapp\obj\Debug\io-gld-refapp.pdb
+i:\src\winglue\apps\pnas\io-gld-refapp\io-gld-refapp\bin\Debug\JsonRPC.dll
+i:\src\winglue\apps\pnas\io-gld-refapp\io-gld-refapp\bin\Debug\JsonRPC.pdb
