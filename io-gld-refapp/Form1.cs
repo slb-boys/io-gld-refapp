@@ -203,7 +203,7 @@ namespace io_gld_refapp
         {
             // get the selected field
             var field_item = (JObject)cmbFields.SelectedItem;
-            int field_id = 0;
+            var field_id = 0;
             if (field_item == null)
             {
                 outputBox.AppendLine("No field selected");
@@ -214,6 +214,22 @@ namespace io_gld_refapp
             }
             return field_id;
         }
+
+        private String get_field_name()
+        {
+            // get the selected field
+            var field_item = (JObject)cmbFields.SelectedItem;
+            var field_name = "";
+            if (field_item == null)
+            {
+                outputBox.AppendLine("No field selected");
+            }
+            else {
+                field_name = field_item.GetValue("field_name").ToString();
+            }
+            return field_name;
+        }
+
         private String get_lease_name()
         {
             // get the selected lease
@@ -229,6 +245,34 @@ namespace io_gld_refapp
             return lease_name;
         }
 
+        private String get_well_name() {
+            // get the selected lease
+            var well_item = (JObject)cmbWells.SelectedItem;
+            var well_name = "";
+            if (well_item == null)
+            {
+                outputBox.AppendLine("No well selected");
+            }
+            else {
+                well_name = well_item.GetValue("well_name").ToString();
+            }
+            return well_name;
+        }
+
+        private String get_string_name()
+        {
+            // get the selected lease
+            var string_item = (JObject)cmbStrings.SelectedItem;
+            var string_name = "";
+            if (string_item == null)
+            {
+                outputBox.AppendLine("No string selected");
+            }
+            else {
+                string_name = string_item.GetValue("string_name").ToString();
+            }
+            return string_name;
+        }
         private void btnFields_Click(object sender, EventArgs e)
         {
             var data_source = get_data_source() ;
@@ -272,7 +316,6 @@ namespace io_gld_refapp
 
         private void btnWells_Click(object sender, EventArgs e)
         {
-
             var data_source = get_data_source() ;
             if (data_source.Length < 1) return;
             var field_id = get_field_id() ;
@@ -294,6 +337,107 @@ namespace io_gld_refapp
             // put in list box
             cmbWells.DataSource = result;
             cmbWells.DisplayMember = "well_name";
+        }
+
+        private void btnString_Click(object sender, EventArgs e)
+        {
+            var data_source = get_data_source();
+            if (data_source.Length < 1) return;
+            var field_id = get_field_id();
+            if (field_id < 1) return;
+            var lease_name = get_lease_name();
+            if (lease_name.Length < 1) return;
+            var well_name = get_well_name();
+            if (well_name.Length < 1) return;
+
+            // Stuff in a JSON object
+            var cinst = new
+            {
+                data_source_name = data_source,
+                field_id = field_id,
+                lease_name = lease_name,
+                well_name = well_name
+            };
+            var param = JObject.FromObject(cinst);
+
+            // call glue
+            var result = call_glue("GetStrings", param);
+
+            // put in list box
+            cmbStrings.DataSource = result;
+            cmbStrings.DisplayMember = "string_name";
+        }
+
+        private void btnCurrentWell_Click(object sender, EventArgs e)
+        {
+            call_glue("GetCurrentWell");
+        }
+
+        private void btnSelectWell_Click(object sender, EventArgs e)
+        {
+            var data_source = get_data_source();
+            if (data_source.Length < 1) return;
+            var field_name = get_field_name();
+            if (field_name.Length < 1) return;
+            var lease_name = get_lease_name();
+            if (lease_name.Length < 1) return;
+            var well_name = get_well_name();
+            if (well_name.Length < 1) return;
+            var string_name = get_string_name();
+            if (string_name.Length < 1) return;
+
+            // Stuff in a JSON object
+            var cinst = new
+            {
+                data_source_name = data_source,
+                field_name = field_name,
+                lease_name = lease_name,
+                well_name = well_name,
+                string_name = string_name
+            };
+            var param = JObject.FromObject(cinst);
+
+            // call glue
+            call_glue("SetCurrentWell", param);
+        }
+
+        private void reset_combo(ComboBox cmb)
+        {
+            cmb.ResetText();
+            cmb.SelectedIndex = -1;
+            cmb.DataSource = null;
+        }
+
+        private void cmbDataSources_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            reset_combo(cmbFields);
+            reset_combo(cmbLeases);
+            reset_combo(cmbWells);
+            reset_combo(cmbStrings);
+        }
+
+        private void cmbFields_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            reset_combo(cmbLeases);
+            reset_combo(cmbWells);
+            reset_combo(cmbStrings);
+
+        }
+
+        private void cmbLeases_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            reset_combo(cmbWells);
+            reset_combo(cmbStrings);
+        }
+
+        private void btnGetWelltest_Click(object sender, EventArgs e)
+        {
+            call_glue("GetCurrentWellTest_Data");
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            call_glue("GetCurrentWellTest_Data");
         }
     } // form
 } // namespace
