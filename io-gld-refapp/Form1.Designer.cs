@@ -34,8 +34,12 @@
             this.outputBox = new System.Windows.Forms.TextBox();
             this.startGlue = new System.Windows.Forms.Button();
             this.pullModel = new System.Windows.Forms.Button();
+            this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.cmbDataSources = new System.Windows.Forms.ComboBox();
+            this.btnDataSources = new System.Windows.Forms.Button();
             this.tableLayoutPanel1.SuspendLayout();
             this.flowLayoutPanel1.SuspendLayout();
+            this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
             // tableLayoutPanel1
@@ -48,7 +52,7 @@
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
             this.tableLayoutPanel1.RowCount = 1;
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(313, 262);
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(313, 275);
             this.tableLayoutPanel1.TabIndex = 0;
             // 
             // flowLayoutPanel1
@@ -57,10 +61,11 @@
             this.flowLayoutPanel1.Controls.Add(this.outputBox);
             this.flowLayoutPanel1.Controls.Add(this.startGlue);
             this.flowLayoutPanel1.Controls.Add(this.pullModel);
+            this.flowLayoutPanel1.Controls.Add(this.groupBox1);
             this.flowLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.flowLayoutPanel1.Location = new System.Drawing.Point(3, 3);
             this.flowLayoutPanel1.Name = "flowLayoutPanel1";
-            this.flowLayoutPanel1.Size = new System.Drawing.Size(307, 256);
+            this.flowLayoutPanel1.Size = new System.Drawing.Size(307, 269);
             this.flowLayoutPanel1.TabIndex = 0;
             // 
             // textBox1
@@ -79,6 +84,7 @@
             this.outputBox.Location = new System.Drawing.Point(3, 9);
             this.outputBox.Multiline = true;
             this.outputBox.Name = "outputBox";
+            this.outputBox.ReadOnly = true;
             this.outputBox.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
             this.outputBox.Size = new System.Drawing.Size(304, 86);
             this.outputBox.TabIndex = 1;
@@ -106,17 +112,50 @@
             this.pullModel.UseVisualStyleBackColor = true;
             this.pullModel.Click += new System.EventHandler(this.pullModel_Click);
             // 
+            // groupBox1
+            // 
+            this.groupBox1.Controls.Add(this.cmbDataSources);
+            this.groupBox1.Controls.Add(this.btnDataSources);
+            this.groupBox1.Location = new System.Drawing.Point(3, 134);
+            this.groupBox1.Name = "groupBox1";
+            this.groupBox1.Size = new System.Drawing.Size(282, 59);
+            this.groupBox1.TabIndex = 4;
+            this.groupBox1.TabStop = false;
+            this.groupBox1.Text = "Data Sources";
+            // 
+            // cmbDataSources
+            // 
+            this.cmbDataSources.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbDataSources.FormattingEnabled = true;
+            this.cmbDataSources.Location = new System.Drawing.Point(134, 21);
+            this.cmbDataSources.Name = "cmbDataSources";
+            this.cmbDataSources.Size = new System.Drawing.Size(121, 24);
+            this.cmbDataSources.TabIndex = 1;
+            // 
+            // btnDataSources
+            // 
+            this.btnDataSources.AutoSize = true;
+            this.btnDataSources.Location = new System.Drawing.Point(6, 21);
+            this.btnDataSources.Name = "btnDataSources";
+            this.btnDataSources.Size = new System.Drawing.Size(104, 27);
+            this.btnDataSources.TabIndex = 0;
+            this.btnDataSources.Text = "Data Sources";
+            this.btnDataSources.UseVisualStyleBackColor = true;
+            this.btnDataSources.Click += new System.EventHandler(this.btnDataSources_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(313, 262);
+            this.ClientSize = new System.Drawing.Size(313, 275);
             this.Controls.Add(this.tableLayoutPanel1);
             this.Name = "Form1";
             this.Text = "IO GLD Ref App";
             this.tableLayoutPanel1.ResumeLayout(false);
             this.flowLayoutPanel1.ResumeLayout(false);
             this.flowLayoutPanel1.PerformLayout();
+            this.groupBox1.ResumeLayout(false);
+            this.groupBox1.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -129,6 +168,9 @@
         private System.Windows.Forms.TextBox outputBox;
         private System.Windows.Forms.Button startGlue;
         private System.Windows.Forms.Button pullModel;
+        private System.Windows.Forms.GroupBox groupBox1;
+        private System.Windows.Forms.Button btnDataSources;
+        private System.Windows.Forms.ComboBox cmbDataSources;
     }
 }
 
