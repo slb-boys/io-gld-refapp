@@ -34,8 +34,8 @@ namespace io_gld_refapp
             try
             {
                 // We will have to find a way to start WinGLUE on a different port
-                String net_address = "localhost";
-                int wg_port = 8080;
+                var net_address = "localhost";
+                var wg_port = 8080;
 
                 // open and retain connection
                 Client rpcClient = Connect_Glue(net_address, wg_port);
@@ -47,15 +47,16 @@ namespace io_gld_refapp
             }
             return null; // not get here
         }
+
         private void Test_Glue_Connect(Client rpcClient)
         {
             // This will talk to WinGLUE
             // Prepare a call "request"
-            String a_string = "Hello Sucker";
-            Request rq =  rpcClient.NewRequest("Echo", a_string);
+            var a_string = "Hello Sucker";
+            var rq =  rpcClient.NewRequest("Echo", a_string);
 
             // Call a remote function
-            GenericResponse response = rpcClient.Rpc(rq);
+            var response = rpcClient.Rpc(rq);
             if (response.Result == null)
             {
                 // WinGLUE not there
@@ -64,7 +65,7 @@ namespace io_gld_refapp
             }
 
             // got something back
-            JToken result = response.Result;
+            var result = response.Result;
 
             // Check return collection, just for show
             if (result.HasValues)
@@ -96,9 +97,58 @@ namespace io_gld_refapp
             print_result_base(function_name, result);
 
             // dump each item
-            foreach ( String str in result) {
-                outputBox.AppendLine(str);
+            foreach ( var jtok in result) {
+                if (jtok.HasValues)
+                {
+                    foreach (var val in jtok)
+                    {
+                        outputBox.AppendLine(val.ToString());
+                    }
+                }
+                {
+                    outputBox.AppendLine(jtok.ToString());
+                }
             }
+        }
+
+        private JToken call_glue(String function_name, JContainer jo)
+        {
+            using (Client rpcClient = Connect_Glue())
+            {
+                var rq = rpcClient.NewRequest(function_name, jo);
+                var response = rpcClient.Rpc(rq);
+
+                if (response.Result == null)
+                {
+                    outputBox.AppendLine(string.Format("{0} Error in response, code:{1} message:{2}",
+                        function_name, response.Error.Code, response.Error.Message));
+                    return null;
+                }
+
+                var result = response.Result;
+                print_string_list(function_name, result);
+                return result;
+            } // using
+        } // call_glue
+
+        private JToken call_glue(String function_name)
+        {
+            using (Client rpcClient = Connect_Glue())
+            {
+                var rq = rpcClient.NewRequest(function_name);
+                var response = rpcClient.Rpc(rq);
+
+                if (response.Result == null)
+                {
+                    outputBox.AppendLine(string.Format("{0} Error in response, code:{1} message:{2}",
+                        function_name, response.Error.Code, response.Error.Message));
+                    return null;
+                }
+
+                var result = response.Result;
+                print_string_list(function_name, result);
+                return result;
+            } // using
         }
 
         public Form1()
@@ -108,7 +158,6 @@ namespace io_gld_refapp
 
         private void startGlue_Click(object sender, EventArgs e)
         {
-
             // Client start out null until created
             if (this.ii > 0 )
             {
@@ -117,7 +166,7 @@ namespace io_gld_refapp
             }
 
             Run_Glue();
-            Client rpcClient = Connect_Glue();
+            var rpcClient = Connect_Glue();
             Test_Glue_Connect( rpcClient);
             this.ii++; // been here
         }
@@ -125,25 +174,8 @@ namespace io_gld_refapp
 
         private void pullModel_Click(object sender, EventArgs e)
         {
-            using (Client rpcClient = Connect_Glue()) {
-
-                String function_name = "getGraphList";
-                Request rq = rpcClient.NewRequest(function_name);
-                GenericResponse response = rpcClient.Rpc(rq);
-
-                if (response.Result == null)
-                {
-                    outputBox.AppendLine(string.Format("Error in response, code:{0} message:{1}",
-                        response.Error.Code, response.Error.Message));
-                    return;
-                }
-
-                JToken result = response.Result;
-                print_string_list(function_name, result);
-            }
+            call_glue("GetGraphList");
         }
-
-
 
         private void outputBox_TextChanged(object sender, EventArgs e)
         {
@@ -152,28 +184,119 @@ namespace io_gld_refapp
 
         private void btnDataSources_Click(object sender, EventArgs e)
         {
-            using (Client rpcClient = Connect_Glue())
-            {
-
-                String function_name = "GetDataSources";
-                Request rq = rpcClient.NewRequest(function_name);
-                GenericResponse response = rpcClient.Rpc(rq);
-
-                if (response.Result == null)
-                {
-                    outputBox.AppendLine(string.Format("Error in response, code:{0} message:{1}",
-                        response.Error.Code, response.Error.Message));
-                    return;
-                }
-
-                JToken result = response.Result;
-                print_string_list(function_name, result);
-
-            }
-
+            var result = call_glue("GetDataSources");
+            cmbDataSources.DataSource = result;
         }
-    }
-}
+
+        private String get_data_source()
+        {
+            // get the selected data source
+            var data_source = cmbDataSources.Text;
+            if (data_source.Length < 1)
+            {
+                outputBox.AppendLine("No data source selected");
+            }
+            return data_source;
+        }
+
+        private int get_field_id()
+        {
+            // get the selected field
+            var field_item = (JObject)cmbFields.SelectedItem;
+            int field_id = 0;
+            if (field_item == null)
+            {
+                outputBox.AppendLine("No field selected");
+            }
+            else {
+                var field_id_str = field_item.GetValue("field_id").ToString();
+                field_id = int.Parse(field_id_str);
+            }
+            return field_id;
+        }
+        private String get_lease_name()
+        {
+            // get the selected lease
+            var lease_item = (JObject)cmbLeases.SelectedItem;
+            var lease_name = "";
+            if (lease_item == null)
+            {
+                outputBox.AppendLine("No lease selected");
+            }
+            else {
+                lease_name = lease_item.GetValue("lease_name").ToString();
+            }
+            return lease_name;
+        }
+
+        private void btnFields_Click(object sender, EventArgs e)
+        {
+            var data_source = get_data_source() ;
+            if (data_source.Length < 1) return;
+
+            // Stuff in a JSON object
+            var cinst = new {
+                data_source_name = data_source,
+            };
+            var param = JObject.FromObject(cinst) ;
+
+            // call glue
+            var result = call_glue("GetFields_Data", param);
+
+            // put in list box
+            cmbFields.DataSource = result;
+            cmbFields.DisplayMember = "field_name";
+        }
+
+        private void btnLeases_Click(object sender, EventArgs e)
+        {
+            var data_source = get_data_source() ;
+            if (data_source.Length < 1) return;
+            var field_id = get_field_id() ;
+            if (field_id < 1) return;
+
+            // Stuff in a JSON object
+            var cinst = new {
+                data_source_name = data_source,
+                field_id = field_id
+            };
+            var param = JObject.FromObject(cinst);
+
+            // call glue
+            var result = call_glue("GetLeases_Data", param);
+
+            // connect combobox to LINQ result
+            cmbLeases.DataSource = result;
+            cmbLeases.DisplayMember = "lease_name";
+        }
+
+        private void btnWells_Click(object sender, EventArgs e)
+        {
+
+            var data_source = get_data_source() ;
+            if (data_source.Length < 1) return;
+            var field_id = get_field_id() ;
+            if (field_id < 1) return;
+            var lease_name = get_lease_name() ;
+            if (lease_name.Length < 1) return;
+
+            // Stuff in a JSON object
+            var cinst = new {
+                data_source_name = data_source,
+                field_id = field_id,
+                lease_name = lease_name
+            };
+            var param = JObject.FromObject(cinst);
+
+            // call glue
+            var result = call_glue("GetWells_Data", param);
+
+            // put in list box
+            cmbWells.DataSource = result;
+            cmbWells.DisplayMember = "well_name";
+        }
+    } // form
+} // namespace
 
 public static class WinFormsExtensions
 {
