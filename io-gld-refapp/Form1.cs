@@ -135,69 +135,28 @@ namespace io_gld_refapp
         {
             using (Client rpcClient = Connect_Glue())
             {
-                var rq = rpcClient.NewRequest(function_name);
-                var response = rpcClient.Rpc(rq);
+                try {
+                    var rq = rpcClient.NewRequest(function_name);
+                    var response = rpcClient.Rpc(rq);
 
-                if (response.Result == null)
-                {
-                    outputBox.AppendLine(string.Format("{0} Error in response, code:{1} message:{2}",
-                        function_name, response.Error.Code, response.Error.Message));
+                    if (response.Result == null)
+                    {
+                        outputBox.AppendLine(string.Format("{0} Error in response, code:{1} message:{2}",
+                            function_name, response.Error.Code, response.Error.Message));
+                        return null;
+                    }
+
+                    var result = response.Result;
+                    print_string_list(function_name, result);
+                    return result;
+                }
+                catch ( Exception ex ) {
+                    outputBox.AppendLine("error: " + ex.ToString() ) ;
                     return null;
                 }
-
-                var result = response.Result;
-                print_string_list(function_name, result);
-                return result;
             } // using
         }
 
-        public Form1()
-        {
-            InitializeComponent();
-        }
-
-        private void startGlue_Click(object sender, EventArgs e)
-        {
-            // Client start out null until created
-            if (this.ii > 0 )
-            {
-                outputBox.AppendLine("Only start WinGLUE once, you hockey puck");
-                return; // get out
-            }
-
-            Run_Glue();
-            var rpcClient = Connect_Glue();
-            Test_Glue_Connect( rpcClient);
-            this.ii++; // been here
-        }
-
-
-        private void pullModel_Click(object sender, EventArgs e)
-        {
-            call_glue("GetGraphList");
-        }
-
-        private void outputBox_TextChanged(object sender, EventArgs e)
-        {
-
-        }
-
-        private void btnDataSources_Click(object sender, EventArgs e)
-        {
-            var result = call_glue("GetDataSources");
-            cmbDataSources.DataSource = result;
-        }
-
-        private String get_data_source()
-        {
-            // get the selected data source
-            var data_source = cmbDataSources.Text;
-            if (data_source.Length < 1)
-            {
-                outputBox.AppendLine("No data source selected");
-            }
-            return data_source;
-        }
 
         private int get_field_id()
         {
@@ -245,7 +204,8 @@ namespace io_gld_refapp
             return lease_name;
         }
 
-        private String get_well_name() {
+        private String get_well_name()
+        {
             // get the selected lease
             var well_item = (JObject)cmbWells.SelectedItem;
             var well_name = "";
@@ -273,6 +233,54 @@ namespace io_gld_refapp
             }
             return string_name;
         }
+
+        public Form1()
+        {
+            InitializeComponent();
+        }
+
+        private void startGlue_Click(object sender, EventArgs e)
+        {
+            // Client start out null until created
+            if (this.ii > 0 )
+            {
+                outputBox.AppendLine("Only start WinGLUE once, you hockey puck");
+                return; // get out
+            }
+
+            Run_Glue();
+            var rpcClient = Connect_Glue();
+            Test_Glue_Connect( rpcClient);
+            this.ii++; // been here
+        }
+
+        private void pullModel_Click(object sender, EventArgs e)
+        {
+            call_glue("GetGraphList");
+        }
+
+        private void outputBox_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void btnDataSources_Click(object sender, EventArgs e)
+        {
+            var result = call_glue("GetDataSources");
+            cmbDataSources.DataSource = result;
+        }
+
+        private String get_data_source()
+        {
+            // get the selected data source
+            var data_source = cmbDataSources.Text;
+            if (data_source.Length < 1)
+            {
+                outputBox.AppendLine("No data source selected");
+            }
+            return data_source;
+        }
+
         private void btnFields_Click(object sender, EventArgs e)
         {
             var data_source = get_data_source() ;
@@ -421,7 +429,6 @@ namespace io_gld_refapp
             reset_combo(cmbLeases);
             reset_combo(cmbWells);
             reset_combo(cmbStrings);
-
         }
 
         private void cmbLeases_SelectedIndexChanged(object sender, EventArgs e)

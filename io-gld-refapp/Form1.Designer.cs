@@ -101,7 +101,7 @@
             this.startGlue.Name = "startGlue";
             this.startGlue.Size = new System.Drawing.Size(122, 27);
             this.startGlue.TabIndex = 2;
-            this.startGlue.Text = "Staert WinGLUE";
+            this.startGlue.Text = "Start WinGLUE";
             this.startGlue.UseVisualStyleBackColor = true;
             this.startGlue.Click += new System.EventHandler(this.startGlue_Click);
             // 
@@ -283,11 +283,10 @@
             this.btnSetWelltest.AutoSize = true;
             this.btnSetWelltest.Location = new System.Drawing.Point(3, 399);
             this.btnSetWelltest.Name = "btnSetWelltest";
-            this.btnSetWelltest.Size = new System.Drawing.Size(93, 27);
+            this.btnSetWelltest.Size = new System.Drawing.Size(98, 27);
             this.btnSetWelltest.TabIndex = 12;
-            this.btnSetWelltest.Text = "Set Welltest";
+            this.btnSetWelltest.Text = "Set WellTest";
             this.btnSetWelltest.UseVisualStyleBackColor = true;
-            this.btnSetWelltest.Click += new System.EventHandler(this.button1_Click);
             // 
             // Form1
             // 
